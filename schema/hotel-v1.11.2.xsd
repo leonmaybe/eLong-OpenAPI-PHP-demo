@@ -45,6 +45,7 @@
       <xs:element minOccurs="0" maxOccurs="1" name="Surroundings" type="xs:string" />
       <xs:element minOccurs="0" maxOccurs="1" name="Facilities" type="xs:string" />
       <xs:element minOccurs="0" maxOccurs="1" name="Suppliers" type="ArrayOfSupplier" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ServiceRank" type="ServiceRank" />
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="ArrayOfHotelLandMark">
@@ -86,6 +87,16 @@
     </xs:sequence>
     <xs:attribute name="StartDate" type="xs:string" />
     <xs:attribute name="EndDate" type="xs:string" />
+  </xs:complexType>
+  <xs:complexType name="ServiceRank">
+    <xs:attribute name="SummaryScore" type="xs:string" />
+    <xs:attribute name="InstantConfirmScore" type="xs:string" />
+    <xs:attribute name="BookingSuccessScore" type="xs:string" />
+    <xs:attribute name="ComplaintScore" type="xs:string" />
+    <xs:attribute name="SummaryRate" type="xs:string" />
+    <xs:attribute name="InstantConfirmRate" type="xs:string" />
+    <xs:attribute name="BookingSuccessRate" type="xs:string" />
+    <xs:attribute name="ComplaintRate" type="xs:string" />
   </xs:complexType>
   <xs:complexType name="ArrayOfHotelRoom">
     <xs:sequence>
@@ -838,6 +849,12 @@
       <xs:element minOccurs="0" maxOccurs="1" name="Hotels" type="ArrayOfHotel" />
     </xs:sequence>
   </xs:complexType>
+  <xs:element name="HotelSimpleList" nillable="true" type="HotelSimpleList" />
+  <xs:complexType name="HotelSimpleList">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="HotelIds" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
   <xs:element name="OrderLog" nillable="true" type="OrderLog" />
   <xs:complexType name="OrderLog">
     <xs:sequence>
@@ -1067,6 +1084,12 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="EnumGuaranteeMoneyType" type="EnumGuaranteeMoneyType" />
+  <xs:element name="RackRateRequest" nillable="true" type="RackRateRequest" />
+  <xs:complexType name="RackRateRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="HotelIds" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
   <xs:element name="Recipient" nillable="true" type="Recipient" />
   <xs:complexType name="Recipient">
     <xs:sequence>
@@ -1355,6 +1378,14 @@
       <xs:element minOccurs="0" maxOccurs="1" name="Baidu_lng" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
+  <xs:element name="HotelCity" nillable="true" type="HotelCity" />
+  <xs:complexType name="HotelCity">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="HotelId" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="CityId" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SubCityId" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
   <xs:element name="HotelBrand" nillable="true" type="HotelBrand" />
   <xs:complexType name="HotelBrand">
     <xs:attribute name="BrandId" type="xs:int" use="required" />
@@ -1366,6 +1397,7 @@
     <xs:attribute name="Letters" type="xs:string" />
     <xs:attribute name="LettersEn" type="xs:string" />
   </xs:complexType>
+  <xs:element name="ServiceRank" nillable="true" type="ServiceRank" />
   <xs:element name="OrderSummary" nillable="true" type="OrderSummary" />
   <xs:element name="IncrRateResult" nillable="true" type="IncrRateResult" />
   <xs:complexType name="IncrRateResult">
@@ -1895,6 +1927,38 @@
       <xs:enumeration value="Rate" />
     </xs:restriction>
   </xs:simpleType>
+  <xs:element name="RackRateResponse" nillable="true" type="RackRateResponse" />
+  <xs:complexType name="RackRateResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="RackRates" type="ArrayOfRackRateHotel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfRackRateHotel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="RackRateHotel" nillable="true" type="RackRateHotel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RackRateHotel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="HotelID" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="RoomTypes" type="ArrayOfRackRateRoomType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfRackRateRoomType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="RackRateRoomType" nillable="true" type="RackRateRoomType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RackRateRoomType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="HotelID" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="RoomTypeID" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="BeginDate" type="xs:dateTime" />
+      <xs:element minOccurs="1" maxOccurs="1" name="EndDate" type="xs:dateTime" />
+      <xs:element minOccurs="1" maxOccurs="1" name="RackRate" type="xs:decimal" />
+      <xs:element minOccurs="0" maxOccurs="1" name="CurrencyCode" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
   <xs:element name="NightlyRate" nillable="true" type="NightlyRate" />
   <xs:element name="BookingRule" nillable="true" type="BookingRule" />
   <xs:element name="Rate" nillable="true" type="Rate" />
@@ -2160,6 +2224,8 @@
       <xs:element minOccurs="1" maxOccurs="1" name="CurrencyCode" type="EnumCurrencyCode" />
     </xs:sequence>
   </xs:complexType>
+  <xs:element name="RackRateHotel" nillable="true" type="RackRateHotel" />
+  <xs:element name="RackRateRoomType" nillable="true" type="RackRateRoomType" />
   <xs:element name="GiftForRP" nillable="true" type="GiftForRP" />
   <xs:element name="HotelGift" nillable="true" type="HotelGift" />
   <xs:element name="HotelGiftDate" nillable="true" type="HotelGiftDate" />
