@@ -1,5 +1,42 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="SubmitOrderPaymentInfoRequest" nillable="true" type="SubmitOrderPaymentInfoRequest" />
+  <xs:complexType name="SubmitOrderPaymentInfoRequest">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="OrderId" type="xs:long" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsGuaranteeOrCharged" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="CreditCard" type="CreditCard" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Amount" type="xs:decimal" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CreditCard">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Number" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="CVV" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ExpirationYear" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ExpirationMonth" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="HolderName" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IdType" type="EnumIdType" />
+      <xs:element minOccurs="0" maxOccurs="1" name="IdNo" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="EnumIdType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="IdentityCard" />
+      <xs:enumeration value="Passport" />
+      <xs:enumeration value="Other" />
+      <xs:enumeration value="OfficerCertificate" />
+      <xs:enumeration value="PoliceID" />
+      <xs:enumeration value="ReentryPermit" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="SubmitOrderPaymentInfoResponse" nillable="true" type="SubmitOrderPaymentInfoResponse" />
+  <xs:complexType name="SubmitOrderPaymentInfoResponse">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="IsSuccess" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Notes" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
   <xs:element name="IsOntimeConfirmRoom" nillable="true" type="IsOntimeConfirmRoom" />
   <xs:complexType name="IsOntimeConfirmRoom">
     <xs:sequence>
@@ -161,6 +198,7 @@
       <xs:element minOccurs="0" maxOccurs="1" name="FacilitiesV2" type="HotelFacilities" />
       <xs:element minOccurs="0" maxOccurs="1" name="Themes" type="xs:string" />
       <xs:element minOccurs="0" maxOccurs="1" name="IsChineseOnly" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="IsMerchantHotel" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="ArrayOfHotelLandMark">
@@ -231,6 +269,7 @@
     </xs:sequence>
     <xs:attribute name="Type" type="xs:int" use="required" />
     <xs:attribute name="IsCoverImage" type="xs:string" />
+    <xs:attribute name="AuthorType" type="xs:string" />
   </xs:complexType>
   <xs:complexType name="ArrayOfLocation">
     <xs:sequence>
@@ -1476,6 +1515,7 @@
       <xs:element minOccurs="0" maxOccurs="1" name="RoomTypeId" type="xs:string" />
       <xs:element minOccurs="1" maxOccurs="1" name="RatePlanId" type="xs:int" />
       <xs:element minOccurs="1" maxOccurs="1" name="PaymentType" type="EnumPaymentType" />
+      <xs:element minOccurs="1" maxOccurs="1" name="CheckInPersonAmount" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="Options" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
@@ -1988,31 +2028,16 @@
       <xs:element minOccurs="0" maxOccurs="1" name="Email" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="CreditCard">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="1" name="Number" type="xs:string" />
-      <xs:element minOccurs="0" maxOccurs="1" name="CVV" type="xs:string" />
-      <xs:element minOccurs="1" maxOccurs="1" name="ExpirationYear" type="xs:int" />
-      <xs:element minOccurs="1" maxOccurs="1" name="ExpirationMonth" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="HolderName" type="xs:string" />
-      <xs:element minOccurs="1" maxOccurs="1" name="IdType" type="EnumIdType" />
-      <xs:element minOccurs="0" maxOccurs="1" name="IdNo" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:simpleType name="EnumIdType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="IdentityCard" />
-      <xs:enumeration value="Passport" />
-      <xs:enumeration value="Other" />
-    </xs:restriction>
-  </xs:simpleType>
   <xs:element name="CreateOrderResult" nillable="true" type="CreateOrderResult" />
   <xs:complexType name="CreateOrderResult">
     <xs:sequence>
       <xs:element minOccurs="1" maxOccurs="1" name="OrderId" type="xs:long" />
       <xs:element minOccurs="1" maxOccurs="1" name="CancelTime" type="xs:dateTime" />
       <xs:element minOccurs="1" maxOccurs="1" name="GuaranteeAmount" type="xs:decimal" />
-      <xs:element minOccurs="1" maxOccurs="1" name="CurrencyCode" type="EnumCurrencyCode" />
+      <xs:element minOccurs="1" maxOccurs="1" name="CurrencyCode" nillable="true" type="EnumCurrencyCode" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsInstantConfirm" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="PaymentDeadlineTime" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" maxOccurs="1" name="PaymentMessage" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="CreditCard" nillable="true" type="CreditCard" />
@@ -2024,6 +2049,9 @@
           <xs:element minOccurs="1" maxOccurs="1" name="ProcessType" type="EnumCreditCardProcessType" />
           <xs:element minOccurs="1" maxOccurs="1" name="Status" type="EnumCreditCardStatus" />
           <xs:element minOccurs="1" maxOccurs="1" name="Amount" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="1" maxOccurs="1" name="LatestPayTime" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Notes" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="IsPayable" nillable="true" type="xs:boolean" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -2269,14 +2297,14 @@
   </xs:complexType>
   <xs:element name="UpdateOrderResult" nillable="true" type="UpdateOrderResult" />
   <xs:complexType name="UpdateOrderResult">
-    <xs:sequence>
-      <xs:element minOccurs="1" maxOccurs="1" name="OrderId" type="xs:long" />
-      <xs:element minOccurs="1" maxOccurs="1" name="CancelTime" type="xs:dateTime" />
-      <xs:element minOccurs="1" maxOccurs="1" name="GuaranteeAmount" type="xs:decimal" />
-      <xs:element minOccurs="1" maxOccurs="1" name="GuaranteeCurrencyCode" type="EnumCurrencyCode" />
-      <xs:element minOccurs="1" maxOccurs="1" name="TotalPrice" type="xs:decimal" />
-      <xs:element minOccurs="1" maxOccurs="1" name="CurrencyCode" type="EnumCurrencyCode" />
-    </xs:sequence>
+    <xs:complexContent mixed="false">
+      <xs:extension base="CreateOrderResult">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="TotalPrice" type="xs:decimal" />
+          <xs:element minOccurs="1" maxOccurs="1" name="GuaranteeCurrencyCode" type="EnumCurrencyCode" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
   <xs:element name="CheckInFeedbackCondition" nillable="true" type="CheckInFeedbackCondition" />
   <xs:complexType name="CheckInFeedbackCondition">
@@ -2293,6 +2321,12 @@
   <xs:complexType name="CheckInFeedbackResult">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PushOrderToConfirmResult" nillable="true" type="PushOrderToConfirmResult" />
+  <xs:complexType name="PushOrderToConfirmResult">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="AdjustTime" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="RatePlan" nillable="true" type="RatePlan" />

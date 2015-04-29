@@ -6,6 +6,9 @@
       <xs:enumeration value="IdentityCard" />
       <xs:enumeration value="Passport" />
       <xs:enumeration value="Other" />
+      <xs:enumeration value="OfficerCertificate" />
+      <xs:enumeration value="PoliceID" />
+      <xs:enumeration value="ReentryPermit" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="EnumLocal" type="EnumLocal" />
